@@ -273,35 +273,36 @@ export default {
             }
 
             this.$emit('clicked', ev);
-
-            if (!this.isDraggable || !this.active) {
-                return
-            }
-
-            if (this.dragHandle && target.getAttribute('data-drag-handle') !== this._uid.toString()) {
-                return
-            }
-
-            if (this.dragCancel && target.getAttribute('data-drag-cancel') === this._uid.toString()) {
-                return
-            }
-
             ev.stopPropagation();
             ev.preventDefault();
 
-            this.bodyDrag = true;
+            this.$nextTick(() => {
+                if (!this.isDraggable || !this.active) {
+                    return
+                }
 
-            this.stickStartPos.mouseX = typeof ev.pageX !== 'undefined' ? ev.pageX : ev.touches[0].pageX;
-            this.stickStartPos.mouseY = typeof ev.pageY !== 'undefined' ? ev.pageY : ev.touches[0].pageY;
+                if (this.dragHandle && target.getAttribute('data-drag-handle') !== this._uid.toString()) {
+                    return
+                }
 
-            this.stickStartPos.left = this.left;
-            this.stickStartPos.right = this.right;
-            this.stickStartPos.top = this.top;
-            this.stickStartPos.bottom = this.bottom;
+                if (this.dragCancel && target.getAttribute('data-drag-cancel') === this._uid.toString()) {
+                    return
+                }
 
-            if (this.parentLimitation) {
-                this.limits = this.calcDragLimitation();
-            }
+                this.bodyDrag = true;
+
+                this.stickStartPos.mouseX = typeof ev.pageX !== 'undefined' ? ev.pageX : ev.touches[0].pageX;
+                this.stickStartPos.mouseY = typeof ev.pageY !== 'undefined' ? ev.pageY : ev.touches[0].pageY;
+
+                this.stickStartPos.left = this.left;
+                this.stickStartPos.right = this.right;
+                this.stickStartPos.top = this.top;
+                this.stickStartPos.bottom = this.bottom;
+
+                if (this.parentLimitation) {
+                    this.limits = this.calcDragLimitation();
+                }
+            });
         },
 
         calcDragLimitation() {
